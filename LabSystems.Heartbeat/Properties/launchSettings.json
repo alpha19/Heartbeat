@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LabSystems.Heartbeat": {
+      "commandName": "Project",
+      "sqlDebugging": true
+    }
+  }
+}

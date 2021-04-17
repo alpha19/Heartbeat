@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="LabSystems.UI.LabSystems.LabSystemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LabSystems.UI.LabSystems"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:prism="http://prismlibrary.com/"
+             mc:Ignorable="d" 
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=local:LabSystemViewModel, IsDesignTimeCreatable=False}">
+
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding RefreshCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+    
+    <Grid>
+        <StackPanel>
+            <DataGrid ItemsSource="{Binding Systems}" AutoGenerateColumns="false" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding HostName}" Header="Host Name" />
+                    <DataGridTextColumn Binding="{Binding Ipaddress}" Header="IP" />
+                    <DataGridTextColumn Binding="{Binding Osversion}" Header="Operating System" />
+                    <DataGridTextColumn Binding="{Binding Timestamp}" Header="Last Updated" />
+                    <DataGridTemplateColumn Header="Drives">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DataGrid ItemsSource="{Binding DiskDrives}" AutoGenerateColumns="false">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding ModelNumber}" Header="Model" />
+                                        <DataGridTextColumn Binding="{Binding SerialNumber}" Header="Serial" />
+                                        <DataGridTextColumn Binding="{Binding Firmware}" Header="Firmware" />
+                                        <DataGridTextColumn Binding="{Binding DriverVersion}" Header="Driver Version" />
+                                        <DataGridTextColumn Binding="{Binding DriverProviderName}" Header="Driver Provider" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button Content="Refresh" Command="{Binding RefreshCommand}" IsEnabled="{Binding IsNotScanning}" Margin="6" />
+        </StackPanel>
+    </Grid>
+</UserControl>

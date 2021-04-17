@@ -1,0 +1,6 @@
+.klocwork/
+.vs/
+packages/
+
+obj/
+bin/
