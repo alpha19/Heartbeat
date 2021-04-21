@@ -4,3 +4,5 @@ packages/
 
 obj/
 bin/
+
+datasettings.json
