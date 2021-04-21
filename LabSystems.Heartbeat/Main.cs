@@ -4,6 +4,7 @@ using LabSystems.Domain.Extensions;
 using System.Collections.Generic;
 using Microsoft.Extensions.CommandLineUtils;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace LabSystems.Heartbeat
 {
@@ -25,9 +26,9 @@ namespace LabSystems.Heartbeat
 
                 Console.WriteLine("Heartbeating...");
 
-                if(arg1.HasValue() && !SystemCategories.Categories.ContainsKey(arg1.Value()))
+                if (arg1.HasValue() && SystemCategories.Categories.ContainsKey(arg1.Value()))
                 {
-                    if(!SystemCategories.Categories.ContainsKey(arg1.Value()))
+                    if(SystemCategories.Categories.ContainsKey(arg1.Value()))
                     {
                         category = SystemCategories.Categories[arg1.Value()];
                     }
@@ -39,7 +40,11 @@ namespace LabSystems.Heartbeat
                 }
 
                 UpdateSystemInfo update = new UpdateSystemInfo();
-                if (update.Update(category))
+
+                Task<bool> updateTask = update.Update(category);
+                updateTask.Wait();
+
+                if (updateTask.Result)
                 {
                     Console.WriteLine("Success!");
                     return 0;

@@ -12,6 +12,12 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=local:LabSystemViewModel, IsDesignTimeCreatable=False}">
 
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:CategoryToStringConverter x:Key="CategoryConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding RefreshCommand}" />
@@ -25,6 +31,7 @@
                     <DataGridTextColumn Binding="{Binding HostName}" Header="Host Name" />
                     <DataGridTextColumn Binding="{Binding Ipaddress}" Header="IP" />
                     <DataGridTextColumn Binding="{Binding Osversion}" Header="Operating System" />
+                    <DataGridTextColumn Binding="{Binding Category, Converter={StaticResource CategoryConverter}}" Header="Category" />
                     <DataGridTextColumn Binding="{Binding Timestamp}" Header="Last Updated" />
                     <DataGridTemplateColumn Header="Drives">
                         <DataGridTemplateColumn.CellTemplate>

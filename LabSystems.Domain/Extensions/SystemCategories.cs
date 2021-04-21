@@ -17,9 +17,9 @@ namespace LabSystems.Domain.Extensions
         public static readonly Dictionary<string, Category> Categories = new Dictionary<string, Category>()
         {
             { "Regression" , Category.TestRegressions },
-            { "Sandbox Developer" , Category.TestRegressions },
-            { "Sandbox Validator" , Category.TestRegressions },
-            { "Developer Primary" , Category.TestRegressions }
+            { "Sandbox Developer" , Category.SandboxDeveloper },
+            { "Sandbox Validator" , Category.SandboxValidator},
+            { "Developer Primary" , Category.Developer }
         };
     }
 }

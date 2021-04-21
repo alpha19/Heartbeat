@@ -1,3 +1,0 @@
-{
-  "DefaultConnection" : "Server=(localdb)\\MSSQLLocalDB;Database=LabSystems_POC;Trusted_Connection=True;"
-}

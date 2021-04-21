@@ -13,6 +13,8 @@ namespace LabSystems.Domain.Services
     public interface ILabSystemService : IDataService<LabSystem>
     {
         Task<LabSystem> CreateOrUpdate(string hostName, LabSystem item);
+
+        Task<LabSystem> Get(string hostName);
     }
 
     public static class DbSetExtensionsLabSystem
@@ -39,9 +41,6 @@ namespace LabSystems.Domain.Services
                 }
                 else
                 {
-                    e.Id = found.Id;
-                    e.LabSystemId = found.LabSystemId;
-
                     context.Entry(found).CurrentValues.SetValues(e);
                 }
             }
@@ -71,6 +70,15 @@ namespace LabSystems.Domain.Services
     {
         public LabSystemService(LabSystemsContextFactory contextFactory) : base(contextFactory)
         {
+        }
+
+        public async Task<LabSystem> Get(string hostName)
+        {
+            using (LabSystemsContext context = _contextFactory.CreateDbContext())
+            {
+                LabSystem entity = await context.Set<LabSystem>().FirstOrDefaultAsync((e) => e.HostName == hostName);
+                return entity;
+            }
         }
 
         public async Task<LabSystem> CreateOrUpdate(string hostName, LabSystem entity)

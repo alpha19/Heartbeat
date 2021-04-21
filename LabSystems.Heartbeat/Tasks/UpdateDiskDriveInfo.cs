@@ -1,7 +1,9 @@
 ﻿using LabSystems.Domain.Models;
 using System.Collections.Generic;
 using System.Management;
-using System.IO;
+using LabSystems.Domain.Services;
+using LabSystems.Domain.Context;
+using System.Threading.Tasks;
 
 namespace LabSystems.Heartbeat.Tasks
 {
@@ -14,9 +16,11 @@ namespace LabSystems.Heartbeat.Tasks
             _driveClass = new ManagementClass("Win32_DiskDrive");
         }
 
-        public ICollection<DiskDrive> Update()
+        public async Task<ICollection<DiskDrive>> Update()
         {        
             ICollection<DiskDrive> disks = new List<DiskDrive>();
+
+            IDiskDriveService service = new DiskDriveService(new LabSystemsContextFactory());
 
             ManagementObjectCollection drives = _driveClass.GetInstances();
 
@@ -44,6 +48,15 @@ namespace LabSystems.Heartbeat.Tasks
                     if (property.Name == serial)
                     {
                         driveModel.SerialNumber = property.Value.ToString();
+
+                        DiskDrive existingDisk = await service.Get(property.Value.ToString());
+
+                        if(existingDisk != null)
+                        {
+                            driveModel.LabSystemId = existingDisk.LabSystemId;
+                            driveModel.Id = existingDisk.Id;
+                        }
+
                         continue;
                     }
                     if(property.Name == PNPDeviceId)

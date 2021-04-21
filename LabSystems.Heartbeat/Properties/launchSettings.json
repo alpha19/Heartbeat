@@ -2,6 +2,7 @@
   "profiles": {
     "LabSystems.Heartbeat": {
       "commandName": "Project",
+      "commandLineArgs": "-c \"Developer Primary\"",
       "sqlDebugging": true
     }
   }

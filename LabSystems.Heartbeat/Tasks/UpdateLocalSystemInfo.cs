@@ -10,7 +10,7 @@ namespace LabSystems.Heartbeat.Tasks
 {
     public interface IUpdateSystemInfo
     {
-        public bool Update(SystemCategories.Category category);
+        public Task<bool> Update(SystemCategories.Category category);
 
     }
     public class UpdateSystemInfo : IUpdateSystemInfo
@@ -19,9 +19,13 @@ namespace LabSystems.Heartbeat.Tasks
         {
         }
 
-        public bool Update(SystemCategories.Category category)
+        public async Task<bool> Update(SystemCategories.Category category)
         {
+            ILabSystemService service = new LabSystemService(new LabSystemsContextFactory());
+
             string hostName = GetHostName();
+
+            LabSystem existingEntity = await service.Get(hostName);
 
             LabSystem entity = new LabSystem()
             {
@@ -32,12 +36,21 @@ namespace LabSystems.Heartbeat.Tasks
                 Category = category,
             };
 
-            entity.DiskDrives?.Clear();
-            entity.DiskDrives = (new UpdateDiskDriveInfo()).Update();
+            if (existingEntity != null)
+            {
+                entity.Id = existingEntity.Id;
 
-            ILabSystemService service = new LabSystemService(new LabSystemsContextFactory());
+                if (category == SystemCategories.Category.Unknown)
+                {
+                    entity.Category = existingEntity.Category;
+                }
+            }
+
+            entity.DiskDrives?.Clear();
+            entity.DiskDrives = await (new UpdateDiskDriveInfo()).Update();
 
             Task<LabSystem> task = service.CreateOrUpdate(hostName, entity);
+
             task.Wait();
             return task.IsCompleted;
         }

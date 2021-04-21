@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "LabSystems.Domain": {
-      "commandName": "Project",
-      "sqlDebugging": true
-    }
-  }
-}
